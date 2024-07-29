@@ -1,0 +1,29 @@
+package org.example;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args)
+    {
+        var scanner = new Scanner(System.in);
+
+        System.out.println("Яка ціна біткоїна сьогодні?");
+        var rate = scanner.nextDouble();
+
+        while (true) {
+            System.out.println("Скільки доларів маєш?");
+            var dollars = scanner.nextDouble();
+
+            if (dollars == 0) {
+
+                System.out.println("Дякую, що скористалися програмою");
+                break;
+            }
+
+
+
+            var result = dollars / rate;
+            System.out.println("Ти можеш отримати BTC = " + result);
+        }
+        }
+}
