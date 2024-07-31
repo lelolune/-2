@@ -1,0 +1,101 @@
+//MyBot
+
+package com.my;
+
+import net.thauvin.erik.crypto.CryptoPrice;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+
+
+public class MyBot extends TelegramLongPollingBot {
+        public MyBot() {
+            super("7151805725:AAGaUJSFNVofIeaccOWdT1ufUGhJu0oNh-s");
+        }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+
+        var chatId = update.getMessage().getChatId();
+        var text = update.getMessage().getText();
+
+        try {
+            var message = new SendMessage();
+            message.setChatId(chatId);
+
+
+        if (text.equals("/start")) {
+            message.setText("Привіт");
+        }
+        else if (text.equals("/dog")) {
+
+            var price =CryptoPrice.spotPrice("DOGE");
+            message.setText("Прайс Dogecoin: " + price.getAmount().doubleValue());
+        }
+
+        else if (text.equals("/btc")) {
+
+            var price =CryptoPrice.spotPrice("BTC");
+            message.setText("Прайс BTC: " + price.getAmount().doubleValue());
+        }
+
+        else if (text.equals("/eth")) {
+
+            var price =CryptoPrice.spotPrice("ETH");
+            message.setText("Прайс ETH: " + price.getAmount().doubleValue());
+        }
+
+        else if (text.equals("/all")) {
+
+            var priceDOG =CryptoPrice.spotPrice("DOGE");
+            var priceETH =CryptoPrice.spotPrice("ETH");
+            var priceBTC =CryptoPrice.spotPrice("BTC");
+
+            String allPrices = "Прайс Dogecoin: " + priceDOG.getAmount().doubleValue() +
+                               "Прайс ETH: " + priceETH.getAmount().doubleValue() +
+                               "Прайс BTC: " + priceBTC.getAmount().doubleValue();
+
+            message.setText(allPrices);
+        }
+
+
+        else {
+            message.setText("Команда невідома");
+        }
+
+
+            execute(message);
+
+        } catch (TelegramApiException e) {
+
+        System.out.println("Помилка!");
+        }
+
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+        @Override
+        public String getBotUsername()
+        {
+            return "firsttrainingbot_bot";
+        }
+        }
+
+        //Main
+
+        package com.my;
+
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+public class Main {
+    public static void main(String[] args) throws Exception
+    {
+            var api = new TelegramBotsApi(DefaultBotSession.class);
+            api.registerBot(new MyBot ());
+
+    }
+}
